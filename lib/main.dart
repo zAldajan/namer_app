@@ -32,6 +32,21 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random();
     notifyListeners();
   }
+
+  // Like mechnism
+
+  var favorites = <WordPair>[];
+
+  void toggleFavorite(){
+    if (favorites.contains(current)){
+      favorites.remove(current);
+    }
+    else{
+      favorites.add(current);
+    }
+    notifyListeners();
+  } 
+
 }
 
 
@@ -41,20 +56,44 @@ class MyHomePage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
+
+    // Icon
+    IconData icon;
+    if(appState.favorites.contains(pair)){
+      icon = Icons.favorite;
+    }
+    else{
+      icon = Icons.favorite_border;
+    }
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Hello'),
             BigCard(pair: pair),
             SizedBox(height:50),
             // ↓ Add Button.
-            ElevatedButton(
-              onPressed: () {
-                appState.getNext();
-              },
-              child: Text('Next'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                
+                ElevatedButton.icon(
+                  onPressed: () {
+                    appState.toggleFavorite();
+                  },
+                  label: Text('Like'),
+                  icon: Icon(icon),
+                ),
+                SizedBox(width:40),
+
+                ElevatedButton(
+                  onPressed: () {
+                    appState.getNext();
+                  },
+                  child: Text('Next'),
+                ),
+              ],
             ),
         
           ],
