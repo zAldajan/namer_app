@@ -52,14 +52,21 @@ class MyAppState extends ChangeNotifier {
 
 // ...
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  
+    var selectedIndex = 0; // create variable
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
           SafeArea(
-            child: NavigationRail(
+            child: NavigationRail   (
               extended: false,
               destinations: [
                 NavigationRailDestination(
@@ -70,10 +77,13 @@ class MyHomePage extends StatelessWidget {
                   icon: Icon(Icons.favorite),
                   label: Text('Favorites'),
                 ),
+              
               ],
-              selectedIndex: 0,
+              selectedIndex: selectedIndex,
               onDestinationSelected: (value) {
-                print('selected: $value');
+                setState(() {
+                  selectedIndex = value;
+                });;
               },
             ),
           ),
