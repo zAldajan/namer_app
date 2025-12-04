@@ -62,6 +62,16 @@ class _MyHomePageState extends State<MyHomePage> {
     var selectedIndex = 0; // create variable
   @override
   Widget build(BuildContext context) {
+
+    var page;
+
+    if (selectedIndex == 0){
+      page = GeneratorPage();
+    }
+    else if (selectedIndex == 1){
+      page = FavoritesPage();
+    }
+
     return Scaffold(
       body: Row(
         children: [
@@ -90,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: GeneratorPage(),
+              child: page,
             ),
           ),
         ],
@@ -98,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
 
 class GeneratorPage extends StatelessWidget {
   @override
@@ -143,6 +154,37 @@ class GeneratorPage extends StatelessWidget {
   }
 }
 
+
+
+// ...
+
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    if (appState.favorites.isEmpty) {
+      return Center(
+        child: Text('No favorites yet.'),
+      );
+    }
+
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text('You have '
+              '${appState.favorites.length} favorites:'),
+        ),
+        for (var pair in appState.favorites)
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text(pair.asLowerCase),
+          ),
+      ],
+    );
+  }
+}
 // ...
 
 class BigCard extends StatelessWidget {
